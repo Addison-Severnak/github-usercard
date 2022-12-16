@@ -5,11 +5,19 @@ import axios from 'axios';
     https://api.github.com/users/<your name>
 */
 
-axios.get(`https://api.github.com/users/Addison-Severnak`)
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'Addison-Severnak'];
+
+for (let i = 0; i < followersArray.length; i++) {
+  getGitCard(followersArray[i]);
+}
+
+function getGitCard(username) {
+  axios.get(`https://api.github.com/users/${username}`)
   .then(resp => {
-    console.log(resp.data);
+    document.querySelector('.cards').appendChild(githubCard(resp.data));
   })
   .catch(err => console.error(err));
+}
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -35,8 +43,6 @@ axios.get(`https://api.github.com/users/Addison-Severnak`)
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 function githubCard(gitInfo) {
 
   const card = document.createElement('div');
@@ -51,6 +57,11 @@ function githubCard(gitInfo) {
   const following = document.createElement('p');
   const bio = document.createElement('p');
 
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  login.classList.add('username');
+
   img.src = gitInfo.avatar_url;
   img.alt = "github user";
   name.textContent = gitInfo.name;
@@ -62,6 +73,19 @@ function githubCard(gitInfo) {
   followers.textContent = `Followers: ${gitInfo.followers}`;
   following.textContent = `Following: ${gitInfo.following}`;
   bio.textContent = gitInfo.bio;
+
+  card.appendChild(img);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(login);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
 
 }
 
